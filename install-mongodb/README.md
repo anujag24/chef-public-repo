@@ -4,7 +4,7 @@ TODO: Enter the cookbook description here.
 
 Provides resources for installing Mongo DB from repository and start it as a service
 
-Requirements
+Requirements:
 
 1. Platforms
    Red Hat (64 bit) 
