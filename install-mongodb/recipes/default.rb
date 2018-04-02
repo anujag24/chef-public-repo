@@ -5,6 +5,8 @@
 # Copyright:: 2018, The Authors, All Rights Reserved.
 #
 
+# Creating UNIX group
+
 group 'mongodbgrp'
 
 user 'mongodbadm' do
@@ -13,6 +15,7 @@ user 'mongodbadm' do
   shell '/bin/bash'
 end
 
+# Creating Mongo DB Repository
 yum_repository 'mongodb' do
   description 'MongoDB Repository'
   baseurl 'http://downloads-distro.mongodb.org/repo/redhat/os/x86_64/'
@@ -21,18 +24,7 @@ yum_repository 'mongodb' do
   action :create
 end
 
-#file '/etc/yum.repos.d/mongodb.repo' do
-#  content '
-#[mongodb-org]
-#name=MongoDB Repository
-#baseurl=http://downloads-distro.mongodb.org/repo/redhat/os/x86_64/
-#gpgcheck=0
-#enabled=1'
-#  mode '0755'
-#  owner 'mongodbadm'
-#  group 'mongodbgrp'
-#end
-
+# Installing MongoDB using yum install
 package 'Install MongoDB' do
   case node[:platform]
   when 'redhat', 'centos'
@@ -40,11 +32,13 @@ package 'Install MongoDB' do
   end
 end
 
+# Starting Mongo DB as a service
 service 'mongod' do
   supports :status => true, :restart => true, :reload => true
   action [ :enable, :start ]
 end
 
+# ensure that MongoDB will start following a system reboot
 bash 'start mongodb service on server restart' do
   code <<-EOH
   sudo chkconfig mongod on
